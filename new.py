@@ -44,30 +44,25 @@ class Game:
         #     for y in range(0,301,75):
         #         pygame.draw.rect(self.screen, GRAY, [x+229, y+90, 7, 50])
 
-    def draw_edges(self, px, py, x, y, H_size, V_size, width_line):
-        # if px >= 244 and px <=305 and py >= 62.5 and py <= 87.5:
-        #     print(px, ' ', py, ' ', x, ' ', y)
-        #     pygame.draw.rect(self.screen, RED, [x, y, H_size, width_line])
-
+    def draw_edges(self, px, py, H_size, V_size, width_line):     
             for vertex in graph.get_vertexs():
-
-                x_r = vertex['center_of_mass']['x'] + 12.5
+                x_r = vertex['center_of_mass']['x'] + 12.5  
                 y_r = vertex['center_of_mass']['y']
                 x_d = vertex['center_of_mass']['x'] - 2
-                y_d = vertex['center_of_mass']['y'] + 12.5
-
+                y_d = vertex['center_of_mass']['y'] + 14
+                
+                if px > 580 or py > 460:
+                    continue
                 if px >= x_r and px <= x_r + 70 and py >= y_r - 12.5 and py <= y_r + 12.5:
                     pygame.draw.rect(self.screen, RED, [x_r, y_r, H_size, width_line])
 
-                elif py >= y_d and py <= y_d + 50 and px >= x_d and px <= x_d + 70:
-                    pygame.draw.rect(self.screen, RED, [x_d, y_d, width_line, H_size])
+                elif py >= y_d and py <= y_d + 50 and px >= x_d - 12.5 and px <= x_d + 12.5:
+                    pygame.draw.rect(self.screen, RED, [x_d, y_d, width_line, V_size])
 
 
     def play(self):
-        x = 244
-        y = 75
         H_size = 61
-        V_size = 50
+        V_size = 52.5
         width_line = 7
 
         while self.exit_:
@@ -100,7 +95,7 @@ class Game:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     px, py = pygame.mouse.get_pos()
                     print('[', px, ' ', py, ']')
-                    self.draw_edges(px, py, x, y ,H_size, V_size, width_line)
+                    self.draw_edges(px, py, H_size, V_size, width_line)
 
             pygame.display.update()
             # pygame.display.flip()

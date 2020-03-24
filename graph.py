@@ -12,7 +12,7 @@ class Graph:
                     'row': i,
                     'column': j,
                     'adjacency_list': [],
-                    'center_of_mass': {'x': center[0], 'y': center[1]}
+                    'center_of_mass': {'x': center[0], 'y': center[1]},
                 }
                 self.vertexs.append(vertex)
                 center[0] += 84
