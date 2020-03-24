@@ -2,7 +2,6 @@
 
 import time
 import pygame
-from main import Graph, Game
 import time
 import sys
 from graph import Graph
@@ -64,10 +63,7 @@ class Game:
                     pygame.draw.rect(self.screen, RED, [x_d, y_d, width_line, H_size])
 
 
-
-
     def play(self):
-
         x = 244
         y = 75
         H_size = 61

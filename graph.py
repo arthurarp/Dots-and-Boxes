@@ -15,7 +15,7 @@ class Graph:
                     'center_of_mass': {'x': center[0], 'y': center[1]}
                 }
                 self.vertexs.append(vertex)
-                center[0] += 83.5
+                center[0] += 84
                 
             center[0] = 231.5
             center[1] += 75
