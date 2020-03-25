@@ -4,6 +4,7 @@ import time
 import pygame
 import time
 import sys
+from random import randint
 from graph import Graph
 
 # definindo cores (variáveis globais)
@@ -57,15 +58,30 @@ class Game:
                 if px >= x_r and px <= x_r + 70 and py >= y_r - 12.5 and py <= y_r + 12.5:
                     pygame.draw.rect(self.screen, RED, [x_r, y_r, H_size, width_line])
                     graph.connect_edge(i, i + 1)
-                    # vertex['adjacency_list'].append(i + 1)
 
                 elif py >= y_d and py <= y_d + 50 and px >= x_d - 12.5 and px <= x_d + 12.5:
                     pygame.draw.rect(self.screen, RED, [x_d, y_d, width_line, V_size])
                     graph.connect_edge(i, i + 5)
-                    # vertex['adjacency_list'].append(i + 5)
 
                 i = i + 1
             graph._print()
+
+    def machine_action(self, px, py):
+        vertexs = graph.get_vertexs()
+        randomic = randint(0, graph.get_n_vertexs())
+        print randomic
+        if px > 580 or py > 460:
+            return self.machine_action()
+        x_r = vertexs[randomic]['center_of_mass']['x'] + 12.5
+        y_r = vertexs[randomic]['center_of_mass']['y']
+        y_d = vertexs[randomic]['center_of_mass']['x'] - 2
+        y_d = vertexs[randomic]['center_of_mass']['y'] + 14
+        
+        pygame.draw.rect(self.screen, BLUE, [x_r, y_r, 61, 7])
+
+
+        return True
+
     def play(self):
         H_size = 61
         V_size = 52.5
@@ -99,9 +115,10 @@ class Game:
                     self.exit_ = False
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    px, py = pygame.mouse.get_pos()
-                    print('[', px, ' ', py, ']')
-                    self.draw_edges(px, py, H_size, V_size, width_line)
+                    if self.machine_action(px, py):
+                        px, py = pygame.mouse.get_pos()
+                        print('[', px, ' ', py, ']')
+                        self.draw_edges(px, py, H_size, V_size, width_line)
 
             pygame.display.update()
             # pygame.display.flip()
@@ -109,5 +126,4 @@ class Game:
 
 
 gameplay = Game()
-
 gameplay.play()

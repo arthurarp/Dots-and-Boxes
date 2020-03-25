@@ -45,4 +45,6 @@ class Graph:
         self.vertexs[origin]['adjacency_list'].append(destiny)
         self.vertexs[destiny]['adjacency_list'].append(origin)
 
+    def is_graph_all_connected(self):
+        pass
 
