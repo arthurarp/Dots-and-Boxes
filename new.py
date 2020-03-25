@@ -48,15 +48,14 @@ class Game:
 
     def draw_edges(self, px, py, H_size, V_size, width_line):     
         i = 0
+        self.is_bot_turn = False
         vertexs = graph.get_vertexs()
         for vertex in vertexs:
             x_r = vertex['center_of_mass']['x'] + 12.5  
             y_r = vertex['center_of_mass']['y']
             x_d = vertex['center_of_mass']['x'] - 2
             y_d = vertex['center_of_mass']['y'] + 14
-            
-            if px > 580 or py > 460:
-                continue
+        
             if px >= x_r and px <= x_r + 70 and py >= y_r - 12.5 and py <= y_r + 12.5:
                 if not graph.is_already_connected(vertexs[i], vertexs[i + 1]):
                     pygame.draw.rect(self.screen, RED, [x_r, y_r, H_size, width_line])
@@ -76,6 +75,8 @@ class Game:
             i = i + 1
         if self.is_bot_turn: 
             self.machine_action(px, py)
+
+            
 
     def machine_action(self, px, py):
         if graph.is_graph_all_connected():
