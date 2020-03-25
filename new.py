@@ -48,7 +48,8 @@ class Game:
 
     def draw_edges(self, px, py, H_size, V_size, width_line):     
         i = 0
-        for vertex in graph.get_vertexs():
+        vertexs = graph.get_vertexs()
+        for vertex in vertexs:
             x_r = vertex['center_of_mass']['x'] + 12.5  
             y_r = vertex['center_of_mass']['y']
             x_d = vertex['center_of_mass']['x'] - 2
@@ -57,18 +58,28 @@ class Game:
             if px > 580 or py > 460:
                 continue
             if px >= x_r and px <= x_r + 70 and py >= y_r - 12.5 and py <= y_r + 12.5:
-                pygame.draw.rect(self.screen, RED, [x_r, y_r, H_size, width_line])
-                graph.connect_edge(i, i + 1)
-
-            elif py >= y_d and py <= y_d + 50 and px >= x_d - 12.5 and px <= x_d + 12.5:
-                pygame.draw.rect(self.screen, RED, [x_d, y_d, width_line, V_size])
-                graph.connect_edge(i, i + 5)
+                if not graph.is_already_connected(vertexs[i], vertexs[i + 1]):
+                    pygame.draw.rect(self.screen, RED, [x_r, y_r, H_size, width_line])
+                    graph.connect_edge(i, i + 1)
+                    self.is_bot_turn = True
+                else:
+                    self.is_bot_turn = False
+            
+            if py >= y_d and py <= y_d + 50 and px >= x_d - 12.5 and px <= x_d + 12.5:
+                if not graph.is_already_connected(vertexs[i], vertexs[i + 5]):
+                    pygame.draw.rect(self.screen, RED, [x_d, y_d, width_line, V_size])
+                    graph.connect_edge(i, i + 5)
+                    self.is_bot_turn = True
+                else:
+                    self.is_bot_turn = False
 
             i = i + 1
-        self.is_bot_turn = True
-        self.machine_action(px, py)
+        if self.is_bot_turn: 
+            self.machine_action(px, py)
 
     def machine_action(self, px, py):
+        if graph.is_graph_all_connected():
+            return 
         vertexs = graph.get_vertexs()
         randomic = randint(0, graph.get_n_vertexs() - 1)
         v_or_h = randint(0, 1)
@@ -100,7 +111,6 @@ class Game:
                 return True
         self.machine_action(px, py)
 
-        self.is_bot_turn = False
         return True
 
     def play(self):
@@ -137,12 +147,10 @@ class Game:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     px, py = pygame.mouse.get_pos()
                     print('[', px, ' ', py, ']')
-                    # graph._print()
-                    if(graph.is_graph_all_connected()):
-                        self.screen.fill(WHITE)
-                    else:
-                        self.draw_edges(px, py, H_size, V_size, width_line)
+                    self.draw_edges(px, py, H_size, V_size, width_line)
 
+                if(graph.is_graph_all_connected()):
+                    self.screen.fill(WHITE)
             pygame.display.update()
             # pygame.display.flip()
             # frame.tick(25)

@@ -59,6 +59,7 @@ class Graph:
             return False
         for edge in self.vertexs[origin['index']]['adjacency_list']:
             if edge == destiny['index']:
+                print(origin['index'], 'ja conectado')
                 return True
         return False
 
