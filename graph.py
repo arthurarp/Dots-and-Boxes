@@ -4,8 +4,11 @@ class Graph:
     def __init__(self, dim1, dim2):
         self.vertexs = []
         self.n_vertexs = dim1 * dim2
+        self.n_edges = 0
         center = [231.5, 75]
         index = 0
+        
+
         for i in range(dim1):
             for j in range(dim2):
                 vertex = {
@@ -44,9 +47,12 @@ class Graph:
     def connect_edge(self, origin, destiny):
         self.vertexs[origin]['adjacency_list'].append(destiny)
         self.vertexs[destiny]['adjacency_list'].append(origin)
+        self.n_edges += 1
 
     def is_graph_all_connected(self):
-        pass
+        if self.n_edges == 49:
+            return True
+        return False
 
     def is_already_connected(self, origin, destiny):
         if origin['adjacency_list'] == [] or destiny['adjacency_list'] == []:

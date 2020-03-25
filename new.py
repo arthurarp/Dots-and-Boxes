@@ -138,7 +138,10 @@ class Game:
                     px, py = pygame.mouse.get_pos()
                     print('[', px, ' ', py, ']')
                     # graph._print()
-                    self.draw_edges(px, py, H_size, V_size, width_line)
+                    if(graph.is_graph_all_connected()):
+                        self.screen.fill(WHITE)
+                    else:
+                        self.draw_edges(px, py, H_size, V_size, width_line)
 
             pygame.display.update()
             # pygame.display.flip()
