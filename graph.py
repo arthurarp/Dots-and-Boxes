@@ -38,8 +38,8 @@ class Graph:
 
     def _print(self):
         for vertex in self.vertexs:
-            if vertex['adjacency_list'] != []:
-                print(vertex)
+            # if vertex['adjacency_list'] != []:
+            print(vertex)
 
     def connect_edge(self, origin, destiny):
         self.vertexs[origin]['adjacency_list'].append(destiny)
@@ -47,4 +47,13 @@ class Graph:
 
     def is_graph_all_connected(self):
         pass
+
+    def is_already_connected(self, origin, destiny):
+        if origin['adjacency_list'] == [] or destiny['adjacency_list'] == []:
+            return False
+        for egde in self.vertexs[origin]['adjacency_list']:
+            if edge == destiny:
+                return True
+        return False
+
 

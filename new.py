@@ -64,22 +64,36 @@ class Game:
                     graph.connect_edge(i, i + 5)
 
                 i = i + 1
-            graph._print()
 
     def machine_action(self, px, py):
         vertexs = graph.get_vertexs()
-        randomic = randint(0, graph.get_n_vertexs())
+        randomic = randint(0, graph.get_n_vertexs() - 1)
+        v_or_h = randint(0, 1)
         print randomic
-        if px > 580 or py > 460:
-            return self.machine_action()
+
         x_r = vertexs[randomic]['center_of_mass']['x'] + 12.5
         y_r = vertexs[randomic]['center_of_mass']['y']
-        y_d = vertexs[randomic]['center_of_mass']['x'] - 2
+        x_d = vertexs[randomic]['center_of_mass']['x'] - 2
         y_d = vertexs[randomic]['center_of_mass']['y'] + 14
         
-        pygame.draw.rect(self.screen, BLUE, [x_r, y_r, 61, 7])
+        try:
+            if not graph.is_already_connected(vertexs[randomic], vertexs[randomic + 1]) and x_r != 567.5 + 12.5:
+                print(x_r, ' | ', y_r)
+                pygame.draw.rect(self.screen, BLUE, [x_r, y_r, 61, 7])
+                graph.connect_edge(randomic, randomic + 1)
+                return True
+        except:
+            pass
 
-
+        try:               
+            if not graph.is_already_connected(vertexs[randomic], vertexs[randomic + 5]) and y_d != 450 + 14:
+                print(x_d, ' || ', y_d)
+                pygame.draw.rect(self.screen, BLUE, [x_d, y_d, 7, 52.5])
+                graph.connect_edge(randomic, randomic + 5)
+                return True
+        except:
+            return self.machine_action(px, py)
+           
         return True
 
     def play(self):
@@ -118,6 +132,7 @@ class Game:
                     if self.machine_action(px, py):
                         px, py = pygame.mouse.get_pos()
                         print('[', px, ' ', py, ']')
+                        # graph._print()
                         self.draw_edges(px, py, H_size, V_size, width_line)
 
             pygame.display.update()
