@@ -23,9 +23,17 @@ class Game:
         self.screen = pygame.display.set_mode((800, 600))
         self.font = pygame.font.SysFont(None, 55)
         self.text = self.font.render("New game", True, BLACK)
+        self.score_text_red = self.font.render("Score: 0", True, RED)
+        self.score_text_blue = self.font.render("Score: 0", True, BLUE)
+        self.endGame = self.font.render("End Game!", True, BLACK)
+        self.red_wins = self.font.render("Red Wins!", True, RED)
+        self.blue_wins = self.font.render("Blue Wins!", True, BLUE)
         pygame.display.set_caption('Dots & Boxes')
         self.exit_ = True
         self.init = True
+        self.game = False
+        self.red_score = 1
+        self.blue_score = 0
         self.is_bot_turn = True
 
     def draw_game(self):
@@ -55,6 +63,9 @@ class Game:
             y_r = vertex['center_of_mass']['y']
             x_d = vertex['center_of_mass']['x'] - 2
             y_d = vertex['center_of_mass']['y'] + 14
+
+            if px > 580 or py > 460:
+                return 
         
             if px >= x_r and px <= x_r + 70 and py >= y_r - 12.5 and py <= y_r + 12.5:
                 if not graph.is_already_connected(vertexs[i], vertexs[i + 1]):
@@ -90,16 +101,16 @@ class Game:
         y_r = vertexs[randomic]['center_of_mass']['y']
         x_d = vertexs[randomic]['center_of_mass']['x'] - 2
         y_d = vertexs[randomic]['center_of_mass']['y'] + 14
+
+        
         
         if vertexs[randomic]['column'] != 4: 
             if not graph.is_already_connected(vertexs[randomic], vertexs[randomic + 1]) and x_r != 567.5 + 12.5:
-                # print(x_r, ' | ', y_r)
                 pygame.draw.rect(self.screen, BLUE, [x_r, y_r, 61, 7])
                 graph.connect_edge(randomic, randomic + 1)
                 return True
             elif vertexs[randomic]['row'] != 5:
                 if not graph.is_already_connected(vertexs[randomic], vertexs[randomic + 5]) and y_d != 450 + 14:
-                    # print(x_d, ' || ', y_d)
                     pygame.draw.rect(self.screen, BLUE, [x_d, y_d, 7, 52.5])
                     graph.connect_edge(randomic, randomic + 5)
                     return True
@@ -110,14 +121,23 @@ class Game:
                 pygame.draw.rect(self.screen, BLUE, [x_d, y_d, 7, 52.5])
                 graph.connect_edge(randomic, randomic + 5)
                 return True
+
+        # recursivo, pois se a maquina nao achar, de primeira, uma posição para jogar ela tem que tentar de novo
         self.machine_action(px, py)
 
         return True
+
+    def end_game(self):
+        self.screen.fill(WHITE)
+        self.screen.blit(self.endGame, [300, 200])
+        self.game = False
+
 
     def play(self):
         H_size = 61
         V_size = 52.5
         width_line = 7
+        self.game = True
 
         while self.exit_:
             while self.init:
@@ -151,7 +171,11 @@ class Game:
                     self.draw_edges(px, py, H_size, V_size, width_line)
 
                 if(graph.is_graph_all_connected()):
-                    self.screen.fill(WHITE)
+                    self.end_game()
+
+            if(self.game):
+                self.screen.blit(self.score_text_red, [45, 500])
+                self.screen.blit(self.score_text_blue, [545, 500])
             pygame.display.update()
             # pygame.display.flip()
             # frame.tick(25)
