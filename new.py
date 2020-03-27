@@ -22,19 +22,22 @@ class Game:
         pygame.init()
         self.screen = pygame.display.set_mode((800, 600))
         self.font = pygame.font.SysFont(None, 55)
+        self.smaller_font = pygame.font.SysFont(None, 25)
         self.text = self.font.render("New game", True, BLACK)
-        self.score_text_red = self.font.render("Score: 0", True, RED)
-        self.score_text_blue = self.font.render("Score: 0", True, BLUE)
-        self.endGame = self.font.render("End Game!", True, BLACK)
+        self.red_score = 1
+        self.blue_score = 0
+        self.score_text_red = self.font.render("Score: " + str(self.red_score), True, RED)
+        self.score_text_blue = self.font.render("Score: " + str(self.blue_score), True, BLUE)
+        self.endGame = self.font.render("End Game", True, BLACK)
         self.red_wins = self.font.render("Red Wins!", True, RED)
         self.blue_wins = self.font.render("Blue Wins!", True, BLUE)
+        self.new_game_text = self.smaller_font.render("Click here or press Enter to play again", True, BLACK)
         pygame.display.set_caption('Dots & Boxes')
         self.exit_ = True
         self.init = True
         self.game = False
-        self.red_score = 1
-        self.blue_score = 0
         self.is_bot_turn = True
+        self.end = False
 
     def draw_game(self):
         self.screen.fill(BLACK) # fundo preto
@@ -130,6 +133,13 @@ class Game:
     def end_game(self):
         self.screen.fill(WHITE)
         self.screen.blit(self.endGame, [300, 200])
+        if(self.red_score > self.blue_score):
+            self.screen.blit(self.red_wins, [309, 250])
+        else:
+            self.screen.blit(self.blue_wins, [309, 250])
+
+        self.screen.blit(self.new_game_text, [250, 350])
+
         self.game = False
 
 
@@ -172,11 +182,31 @@ class Game:
 
                 if(graph.is_graph_all_connected()):
                     self.end_game()
+                    self.end = True
 
             if(self.game):
                 self.screen.blit(self.score_text_red, [45, 500])
                 self.screen.blit(self.score_text_blue, [545, 500])
+
+            
             pygame.display.update()
+            
+            while self.end:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        self.exit_ = False
+                        self.init = False
+
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_RETURN:
+                            self.end = False
+                            self.red_score = 0
+                            self.blue_score = 0
+                            self.draw_game()
+
+
+            
+            
             # pygame.display.flip()
             # frame.tick(25)
 
