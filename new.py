@@ -203,6 +203,9 @@ class Game:
                             self.red_score = 0
                             self.blue_score = 0
                             self.draw_game()
+                            graph.clear()
+                            graph.__init__(6, 5)
+                            self.game = True
 
 
             

@@ -63,4 +63,8 @@ class Graph:
                 return True
         return False
 
+    def clear(self):
+        self.vertexs = []
+        self.n_edges = 0
+
 
